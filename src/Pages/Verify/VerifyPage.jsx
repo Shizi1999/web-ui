@@ -1,20 +1,27 @@
 import { useState } from 'react';
 import { Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import classNames from 'classnames/bind';
 import { Button } from '@mui/material';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import ReactLoading from 'react-loading';
 
 import Countdown from './Countdown';
 import InputField from '~/components/FormElement/InputField';
 import FormHeader from '~/Layout/FormLayout/FormHeader';
 import config from '~/config';
 import styles from '~/Layout/FormLayout/FormLayout.module.scss';
+import axiosClient from '~/api/axiosClient';
 
 const cx = classNames.bind(styles);
 function VerifyPage() {
-  const fakeEmail = 'thanhxuanvoiva1999@gmail.com';
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [resend, setResend] = useState(false);
+  const email = localStorage.getItem('TheDrinkCurrentEmail');
 
   const schema = yup
     .object({
@@ -31,30 +38,44 @@ function VerifyPage() {
     resolver: yupResolver(schema),
   });
 
-  const [resend, setResend] = useState(false);
-
   const resendCode = (e) => {
     e.preventDefault();
     setResend(true);
     setTimeout(() => {
       setResend(false);
     }, 60000);
+    const email = localStorage.getItem('TheDrinkCurrentEmail');
+    axiosClient.post('/resendcode', { email });
   };
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    setIsSubmitting(true);
+    axiosClient
+      .post('/verify', { ...data, email })
+      .then((res) => {
+        if (res.code === 1) {
+          navigate('/login');
+        } else {
+          setErrorMessage(res.message);
+          setIsSubmitting(false);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <Fragment>
       <FormHeader to={config.routes.register} title="Xác Thực" />
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className={cx('title-verify')}>
-          Một mã xác nhận đã được gửi tới Email <span>{fakeEmail}</span>. Vui lòng kiểm tra email và xác nhận tại đây!
+          Một mã xác nhận đã được gửi tới Email <span>{email}</span>. Vui lòng kiểm tra email và xác nhận tại đây!
         </div>
         <div className={cx('form-group')}>
-          <InputField name="verifyCode" form={form} label="Mã xác thực" type="password" />
+          <InputField name="verifyCode" form={form} label="Mã xác thực" />
         </div>
         <div className={cx('form-group')}>
           <Button fullWidth margin="normal" type="submit" variant="contained">
-            Đăng nhập
+            Xác thực
+            {isSubmitting && <ReactLoading type="spin" color="white" height={20} width={20} margin={6} />}
           </Button>
         </div>
         <div className={cx('list-btn')}>
@@ -63,6 +84,7 @@ function VerifyPage() {
             Gửi lại {resend && <Countdown startTime={60} />}
           </button>
         </div>
+        <div className={cx('error-message')}>{errorMessage}</div>
       </form>
     </Fragment>
   );

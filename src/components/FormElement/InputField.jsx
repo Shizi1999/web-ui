@@ -2,7 +2,7 @@ import { Controller } from 'react-hook-form';
 import { TextField } from '@mui/material';
 
 function InputField(props) {
-  const { form, name, label, ...passProps } = props;
+  const { form, name, label, errorMessage = '', onChange, ...passProps } = props;
   const { control } = form;
   return (
     <Controller
@@ -11,8 +11,8 @@ function InputField(props) {
       render={({ field, fieldState: { error } }) => {
         return (
           <TextField
-            error={error?.message.length > 0 ? true : false}
-            helperText={error?.message}
+            error={error?.message.length > 0 || errorMessage.length > 0}
+            helperText={error?.message || (errorMessage.length > 0 ? errorMessage : '')}
             label={label}
             fullWidth
             {...passProps}

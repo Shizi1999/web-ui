@@ -14,5 +14,5 @@ export const homeSlice = createSlice({
   },
 });
 
-export const { setAction } = homeSlice.actions;
+export const { actions } = homeSlice;
 export default homeSlice.reducer;
