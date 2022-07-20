@@ -1,18 +1,42 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axiosClient from '~/api/axiosClient';
 
 const initialState = {
-  action: '',
+  isLogin: false,
+  user: { email: '', name: '', adress: '', avatar: '', phone: '' },
 };
+// Thunk
+export const getUserInfo = createAsyncThunk('getUserInfo', async () => {
+  const response = await axiosClient.get('/user');
+  return response;
+});
 
 export const homeSlice = createSlice({
   name: 'home',
   initialState,
   reducers: {
-    setAction: (state) => {
-      state.action = 'Test reducer';
+    logOut: (state) => {
+      localStorage.setItem('TheDrink', '');
+      state.isLogin = false;
+      state.user = {
+        name: '',
+        adress: '',
+        avatar: '',
+        phone: '',
+        email: '',
+      };
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getUserInfo.fulfilled, (state, action) => {
+      const login = action.payload.code === 1;
+      state.isLogin = login;
+      state.user = {
+        ...action.payload,
+      };
+    });
   },
 });
 
-export const { actions } = homeSlice;
+export const { logOut } = homeSlice.actions;
 export default homeSlice.reducer;

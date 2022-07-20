@@ -1,0 +1,56 @@
+.content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  margin-top: 20px;
+}
+
+.avatar {
+  flex: 1;
+}
+.avartar-preview {
+  width: 200px;
+  height: auto;
+  img {
+    width: 100%;
+    object-fit: contain;
+  }
+}
+// form
+.profile-form {
+  flex: 2;
+  display: block;
+  padding-right: 100px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+  height: 60px;
+}
+
+.form-text {
+  padding: 10px 0;
+}
+// user-infor
+.user-info {
+  width: 100%;
+  background-color: white;
+  padding: 10px;
+  box-shadow: 0 0 4px rgb(212, 211, 211);
+  border-radius: 2px;
+  margin-bottom: 20px;
+  h3 {
+    padding-bottom: 10px;
+  }
+}
+.user-info-item {
+  line-height: 24px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.item-label {
+  display: inline-block;
+  width: 100px;
+  font-weight: 600;
+}

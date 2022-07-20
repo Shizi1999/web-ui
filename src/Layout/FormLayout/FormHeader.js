@@ -17,7 +17,7 @@ function FormHeader({ title, to = config.routes.home }) {
         <Link to={to} className={cx('back-icon')}>
           <FontAwesomeIcon icon={faLeftLong} />
         </Link>
-        <img src={images.formLogo} alt="" />
+        <img src={images.logo} alt="" />
       </div>
       <div className={cx('form-title')}>{title}</div>
     </Fragment>

@@ -10,12 +10,14 @@ import ReactLoading from 'react-loading';
 
 import axiosClient from '~/api/axiosClient';
 import InputField from '~/components/FormElement/InputField';
+import PasswordField from '~/components/FormElement/PasswordField';
 import FormHeader from '~/Layout/FormLayout/FormHeader';
 import config from '~/config';
 import styles from '~/Layout/FormLayout/FormLayout.module.scss';
 
 const cx = classNames.bind(styles);
-function LoginPage() {
+function Login() {
+  const routes = config.routes;
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [emailMessage, setEmailMessage] = useState('');
@@ -40,29 +42,32 @@ function LoginPage() {
     setIsSubmitting(true);
     setEmailMessage('');
     setPasswordMessage('');
-    axiosClient.post('/signin', data).then((res) => {
-      if (res.code === 1) {
-        localStorage.setItem('TheDrink', res.token);
-        navigate('/');
-      } else if (res.code === 0) {
-        setEmailMessage(res.emailMessage);
-        setIsSubmitting(false);
-      } else {
-        setPasswordMessage(res.passwordMessage);
-        setIsSubmitting(false);
-      }
-    });
+    axiosClient
+      .post(routes.login, data)
+      .then((res) => {
+        if (res.code === 1) {
+          localStorage.setItem('TheDrink', res.token);
+          navigate(routes.home);
+        } else if (res.code === 0) {
+          setEmailMessage(res.emailMessage);
+          setIsSubmitting(false);
+        } else {
+          setPasswordMessage(res.passwordMessage);
+          setIsSubmitting(false);
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
     <Fragment>
-      <FormHeader to={config.routes.home} title="Login" />
+      <FormHeader to={routes.home} title="Login" />
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className={cx('form-group')}>
           <InputField name="email" form={form} errorMessage={emailMessage} label="Email adress" />
         </div>
         <div className={cx('form-group')}>
-          <InputField name="password" form={form} errorMessage={passwordMessage} type="password" label="Password" />
+          <PasswordField name="password" form={form} errorMessage={passwordMessage} label="Password" />
         </div>
         <div className={cx('form-group')}>
           <Button fullWidth margin="normal" type="submit" variant="contained">
@@ -71,10 +76,10 @@ function LoginPage() {
           </Button>
         </div>
         <div className={cx('list-btn')}>
-          <Link to={'/'} className={cx('text-btn')}>
+          <Link to={routes.forgetpassword} className={cx('text-btn')}>
             Quên mật khẩu?
           </Link>
-          <Link to={config.routes.register} className={cx('text-btn')}>
+          <Link to={routes.register} className={cx('text-btn')}>
             Đăng kí!
           </Link>
         </div>
@@ -83,4 +88,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default Login;

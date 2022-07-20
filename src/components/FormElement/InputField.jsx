@@ -2,7 +2,7 @@ import { Controller } from 'react-hook-form';
 import { TextField } from '@mui/material';
 
 function InputField(props) {
-  const { form, name, label, errorMessage = '', onChange, ...passProps } = props;
+  const { form, name, label, errorMessage = '', ...passProps } = props;
   const { control } = form;
   return (
     <Controller

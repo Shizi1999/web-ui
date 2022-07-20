@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import store from './app/store';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { QueryClient, QueryClientProvider } from 'react-query';
 import GlobalStyle from '~/components/GlobalStyle/GlobalStyle';
 
 const container = document.getElementById('root');
@@ -14,7 +14,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <GlobalStyle>
-        <App />
+        <QueryClientProvider client={new QueryClient()}>
+          <App />
+        </QueryClientProvider>
       </GlobalStyle>
     </Provider>
   </React.StrictMode>,

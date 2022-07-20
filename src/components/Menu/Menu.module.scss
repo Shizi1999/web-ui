@@ -1,0 +1,18 @@
+.menu-tippy {
+  background-color: var(--primary);
+  padding-top: 10px;
+  min-width: 200px;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 20px;
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
+  &:hover {
+    cursor: pointer;
+    color: var(--active-color);
+  }
+}

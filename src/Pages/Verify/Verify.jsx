@@ -16,10 +16,12 @@ import styles from '~/Layout/FormLayout/FormLayout.module.scss';
 import axiosClient from '~/api/axiosClient';
 
 const cx = classNames.bind(styles);
-function VerifyPage() {
+function Verify() {
+  const routes = config.routes;
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [resend, setResend] = useState(false);
   const email = localStorage.getItem('TheDrinkCurrentEmail');
 
@@ -45,18 +47,27 @@ function VerifyPage() {
       setResend(false);
     }, 60000);
     const email = localStorage.getItem('TheDrinkCurrentEmail');
-    axiosClient.post('/resendcode', { email });
+    axiosClient.post(routes.resendcode, { email });
   };
   const onSubmit = (data) => {
     setIsSubmitting(true);
     axiosClient
-      .post('/verify', { ...data, email })
+      .post(routes.verify, { ...data, email })
       .then((res) => {
         if (res.code === 1) {
-          navigate('/login');
-        } else {
-          setErrorMessage(res.message);
+          setSuccessMessage('Đăng ký thành công. Bạn sẽ được chuyển đến trang đăng nhập sau 3s.');
+          setTimeout(() => {
+            navigate(routes.login);
+          }, 3000);
+        } else if (res.code === 2) {
+          setErrorMessage('Mã xác nhận không chính xác');
           setIsSubmitting(false);
+        } else {
+          setIsSubmitting(false);
+          setErrorMessage('Email chưa được đăng ký. Bạn sẽ được chuyển đến trang đăng ký trong vòng 3s.');
+          setTimeout(() => {
+            navigate(routes.register);
+          }, 3000);
         }
       })
       .catch((err) => console.log(err));
@@ -64,13 +75,13 @@ function VerifyPage() {
 
   return (
     <Fragment>
-      <FormHeader to={config.routes.register} title="Xác Thực" />
+      <FormHeader to={routes.register} title="Xác Thực" />
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className={cx('title-verify')}>
           Một mã xác nhận đã được gửi tới Email <span>{email}</span>. Vui lòng kiểm tra email và xác nhận tại đây!
         </div>
         <div className={cx('form-group')}>
-          <InputField name="verifyCode" form={form} label="Mã xác thực" />
+          <InputField name="verifyCode" form={form} label="Mã xác thực" errorMessage={errorMessage} />
         </div>
         <div className={cx('form-group')}>
           <Button fullWidth margin="normal" type="submit" variant="contained">
@@ -84,10 +95,10 @@ function VerifyPage() {
             Gửi lại {resend && <Countdown startTime={60} />}
           </button>
         </div>
-        <div className={cx('error-message')}>{errorMessage}</div>
       </form>
+      <div className={cx('success-message')}>{successMessage}</div>
     </Fragment>
   );
 }
 
-export default VerifyPage;
+export default Verify;

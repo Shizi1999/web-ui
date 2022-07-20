@@ -1,14 +1,17 @@
+import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { publicRouter } from './routes';
-
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
           {publicRouter.map((route, index) => {
-            const Layout = route.layout;
+            let Layout = Fragment;
+            if (route.layout) {
+              Layout = route.layout;
+            }
             const Comp = route.comp;
             return (
               <Route

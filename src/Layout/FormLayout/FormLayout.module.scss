@@ -23,7 +23,7 @@
   img {
     height: 100%;
     display: block;
-    margin-left: 30px;
+    margin-left: 62px;
   }
 
   .back-icon {
@@ -99,4 +99,13 @@
 .error-message {
   color: red;
   font-size: 1rem;
+}
+
+.success-message {
+  color: var(--primary);
+  font-size: 1rem;
+}
+
+.password-show-hide {
+  font-size: 10px !important;
 }
