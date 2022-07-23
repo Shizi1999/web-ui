@@ -9,14 +9,14 @@ import { faBan } from '@fortawesome/free-solid-svg-icons';
 const cx = classNames.bind(styles);
 
 function AccountItem({ account }) {
-  const { id, avatar, name, payed, orders, note } = account;
+  const { avatar, name, orders, note } = account;
   return (
     <div className={cx('account-item')}>
-      <div className={cx('account-item-box')}>
+      <div className={cx('align-left')}>
         <Avatar image={avatar} />
         <span>{name}</span>
       </div>
-      <div className={cx('account-item-box')}>{formatCurrency(payed)}</div>
+      <div className={cx('account-item-box')}>{formatCurrency(0)}</div>
       <div className={cx('account-item-box')}>{orders}</div>
       <div className={cx('account-item-box')}>{note}</div>
       <div className={cx('account-item-box')}>

@@ -1,0 +1,18 @@
+.btn-product-type {
+  background-color: var(--primary);
+  width: 120px;
+  height: 40px;
+  color: white;
+  border-radius: 2px;
+  font-size: 1rem;
+  outline: none;
+  border: none;
+  &:hover {
+    opacity: 0.9;
+    cursor: pointer;
+  }
+}
+.btn-icon {
+  display: inline-block;
+  margin-right: 4px;
+}

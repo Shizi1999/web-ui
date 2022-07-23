@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -17,12 +16,11 @@ import { images } from '~/assets/images';
 const cx = classNames.bind(styles);
 
 function Profile() {
-  const { isLogin, user } = useSelector((state) => state.home);
+  const { user } = useSelector((state) => state.home);
   const dispatch = useDispatch();
   const [previewAvatar, setPreviewAvatar] = useState(user.avatar);
   const [selectedFile, setSelectedFile] = useState();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const navigate = useNavigate();
   const schema = yup
     .object({
       name: yup.string().required('Trường này không được để trống'),
@@ -87,11 +85,6 @@ function Profile() {
     setPreviewAvatar(user.avatar);
   }, [user]);
 
-  useEffect(() => {
-    if (!isLogin) {
-      navigate('/login');
-    }
-  }, []);
   return (
     <div className={cx('wrapper')}>
       <h2>Hello: {user.name}</h2>

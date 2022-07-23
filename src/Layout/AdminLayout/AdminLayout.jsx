@@ -1,4 +1,12 @@
-import { faBars, faBook, faBoxOpen, faHouseUser, faTrash, faUserGear } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBars,
+  faBook,
+  faBoxOpen,
+  faHouseUser,
+  faRectangleList,
+  faTrash,
+  faUserGear,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
@@ -32,6 +40,14 @@ function AdminLayout({ children }) {
             >
               <NavLink className={({ isActive }) => cx({ linkActive: isActive })} to={routes.admin}>
                 Trang Chính
+              </NavLink>
+            </MenuItem>
+            <MenuItem
+              icon={<FontAwesomeIcon className={cx('menu-item-icon')} icon={faRectangleList} />}
+              className={cx('menu-item-text')}
+            >
+              <NavLink className={({ isActive }) => cx({ linkActive: isActive })} to={'/producttype'}>
+                Danh Mục Sản Phẩm
               </NavLink>
             </MenuItem>
             <MenuItem

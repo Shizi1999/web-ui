@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames/bind';
-import { faLocationDot, faSignOut, faTruck, faUser, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faSignOut, faTruck, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import config from '~/config';

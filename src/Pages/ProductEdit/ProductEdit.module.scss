@@ -1,0 +1,141 @@
+.wrapper {
+  padding: 0 30px;
+  width: 100%;
+  padding-bottom: 30px;
+}
+
+.title {
+  text-align: center;
+  color: var(--primary);
+  padding: 10px 0;
+}
+//  product
+.product {
+  width: 100%;
+  display: flex;
+}
+
+.product-image {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-image {
+  margin-top: 20px;
+  width: 200px;
+  height: 250px;
+  border: 1px solid var(--primary);
+  margin-bottom: 10px;
+  object-fit: cover;
+}
+
+.thumbnail {
+  display: inline-block;
+}
+.btn-submit {
+  background-color: var(--primary);
+  color: white;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  margin-top: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.error-message {
+  color: red;
+  margin: 4px 0;
+  height: 10px;
+}
+
+// form
+.form {
+  flex: 3;
+  padding-left: 100px;
+  padding: 0 10%;
+}
+
+.form-group {
+  width: 100%;
+  display: flex;
+  padding: 12px 0;
+  flex-direction: column;
+  min-height: 80px;
+}
+.label {
+  display: inline-block;
+  padding: 2px 4px;
+}
+.form-input {
+  flex: 1;
+  border-radius: 4px;
+  outline: none;
+  border: 1px solid gray;
+  text-indent: 14px;
+  font-size: 1.1rem;
+  &:hover {
+    border-color: black;
+  }
+  &:focus {
+    border: 2px solid var(--primary);
+  }
+}
+
+.form-select {
+  height: 30px;
+  width: 100%;
+}
+
+.group-input-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group-input {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 50px;
+  margin: 4px 0;
+  input {
+    flex: 1;
+    border-radius: 4px;
+    outline: none;
+    border: 1px solid gray;
+    text-indent: 14px;
+    font-size: 0.9rem;
+  }
+}
+.group-input + .group-input {
+  padding-left: 20px;
+}
+.delete-group {
+  display: block;
+  margin-left: 20px;
+  margin-top: 18px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.add-input-item {
+  background-color: var(--primary);
+  color: white;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  margin-top: 10px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.markdown {
+  width: 100%;
+  button {
+    padding: 10px 20px;
+  }
+  margin-top: 20px;
+}

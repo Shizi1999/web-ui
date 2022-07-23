@@ -18,6 +18,8 @@ import ProductManage from '~/Pages/ProductManage/ProductManage';
 import NewsManage from '~/Pages/NewsManage/NewsManage';
 import Profile from '~/Pages/Profile/Profile';
 import News from '~/Pages/News/News';
+import ProductEdit from '~/Pages/ProductEdit/ProductEdit';
+import ProductType from '~/Pages/ProductType/ProductType';
 const paths = config.routes;
 
 const publicRouter = [
@@ -29,6 +31,8 @@ const publicRouter = [
   { path: paths.accountmanage, comp: AccountManage, layout: AdminLayout },
   { path: paths.newsmanage, comp: NewsManage, layout: AdminLayout },
   { path: paths.productmanage, comp: ProductManage, layout: AdminLayout },
+  { path: paths.productedit, comp: ProductEdit, layout: AdminLayout },
+  { path: paths.producttype, comp: ProductType, layout: AdminLayout },
 
   { path: paths.login, comp: Login, layout: FormLayout },
   { path: paths.register, comp: Register, layout: FormLayout },

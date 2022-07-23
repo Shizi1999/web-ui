@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import { Link, NavLink } from 'react-router-dom';
-import { faAngleDown, faArrowDown, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
 

@@ -13,6 +13,8 @@ const routes = {
   productmanage: '/productmanage/:slug',
   profile: '/profile',
   news: '/news/:slug',
+  productedit: '/productedit/:slug',
+  producttype: '/producttype',
 };
 
 export default routes;
