@@ -16,7 +16,7 @@ function ProductType() {
   const dispatch = useDispatch();
   const handleConfirm = (value) => {
     axiosClient
-      .post('/product/types/upload', { type: value })
+      .post('/product/types/upload', { name: value })
       .then((res) => {
         if (res.code === 1) {
           dispatch(getProductType());
@@ -56,7 +56,7 @@ function ProductType() {
       {productType.map((item) => (
         <ProductTypeItem
           key={item.slug}
-          title={item.title}
+          title={item.name}
           slug={item.slug}
           amount={item.amount}
           handleDelete={handleDelete}

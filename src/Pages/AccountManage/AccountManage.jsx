@@ -15,7 +15,7 @@ function AccountManage() {
 
   useEffect(() => {
     axiosClient
-      .get('/userscount', null, {
+      .get('/userscount', {
         params: {
           type: 'active',
         },

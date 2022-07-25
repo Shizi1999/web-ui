@@ -1,37 +1,65 @@
-import classNames from 'classnames/bind';
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import classNames from 'classnames/bind';
 import { Select, MenuItem } from '@mui/material';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import styles from './ProductEdit.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faImage, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { images } from '~/assets/images';
 import TextEditor from '~/components/TextEditor/TextEditor';
 import ProductDetailInput from './ProductDetailInput';
+import { getOneProduct, getProductType } from '~/app/productReducer';
+import axiosClient from '~/api/axiosClient';
+import toastMessage from '~/utils/toastMessage';
 
 const cx = classNames.bind(styles);
 
 function ProductEdit() {
-  const productTypes = [
-    { slug: 'cotrang', title: 'Co Trang' },
-    { slug: 'hiendai', title: 'Hien Dai' },
-  ];
-
-  // const [productDetail, setProductDetail] = useState([{ title: '', price: 0, number: 0 }]);
+  const { successToastMessage, errorToastMessage } = toastMessage;
+  const { slug } = useParams();
+  const navigate = useNavigate();
+  const { productType, currentProduct } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [productDetail, setProductDetail] = useState([]);
   const [selectValue, setSelectValue] = useState('');
-  const groupInputRef = useRef();
-  const [previewAvatar, setPreviewAvatar] = useState(images.productPreview);
+  const [previewAvatar, setPreviewAvatar] = useState(images.uploadProduct);
   const [selectedFile, setSelectedFile] = useState();
   const [html, setHtml] = useState('');
-  const [markdown, setMarkdown] = useState('**Hello**');
-
-  const handlePreviewAvatar = (e) => {
-    if (e.target.files) {
-      setSelectedFile(e.target.files[0]);
+  const [markdown, setMarkdown] = useState('');
+  const [isValidate, setIsValidate] = useState(true);
+  const groupInputRef = useRef();
+  // eslint-disable-next-line
+  useEffect(() => {
+    dispatch(getProductType());
+    if (slug === 'new') {
+    } else {
+      dispatch(getOneProduct(slug));
     }
-  };
+  }, []);
+  useEffect(() => {
+    if (!currentProduct.isEmpty && slug !== 'new' && productType.length > 0) {
+      const { name, productType, image, types, desMarkdown, desHtml } = currentProduct.product;
+      setName(name);
+      setSelectValue(productType);
+      if (image !== '') {
+        setPreviewAvatar(image);
+      }
+      setProductDetail(types);
+      setMarkdown(desMarkdown);
+      setHtml(desHtml);
+    }
+  }, [currentProduct]);
+
+  useEffect(() => {
+    if (productType.length > 0 && slug === 'new') {
+      setSelectValue(productType[0].slug);
+    }
+  }, [productType]);
 
   useEffect(() => {
     if (!selectedFile) {
@@ -44,32 +72,32 @@ function ProductEdit() {
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
+  const handlePreviewAvatar = (e) => {
+    if (e.target.files) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
   const getProductDetail = () => {
     const groupProductDetail = groupInputRef.current.children;
     let newProductDetail = [];
     for (let i = 0; i < groupProductDetail.length; i++) {
       let arr = groupProductDetail[i].getElementsByTagName('input');
-      if (
-        arr[0].value === '' ||
-        arr[1].value === '' ||
-        arr[2].value === '' ||
-        arr[1].value === 0 ||
-        arr[2].value === 0
-      ) {
+      if (arr[0].value === '' || arr[1].value === '' || arr[2].value === '' || arr[1].value === 0) {
         continue;
       } else {
         newProductDetail.push({
-          title: arr[0].value,
-          price: arr[1].value,
-          number: arr[2].value,
+          type: arr[0].value,
+          price: parseInt(arr[1].value),
+          amount: parseInt(arr[2].value),
         });
       }
     }
-    console.log(newProductDetail);
+    return newProductDetail;
   };
 
   const addItem = () => {
-    const newProductDetail = { title: '', price: 0, number: 0 };
+    const newProductDetail = { type: '', price: 0, amount: 0 };
     setProductDetail((prev) => [...prev, newProductDetail]);
   };
 
@@ -88,7 +116,35 @@ function ProductEdit() {
   };
 
   const handleSubmit = () => {
-    getProductDetail();
+    if (name === '') {
+      setIsValidate(false);
+    } else {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+      const details = getProductDetail();
+      formData.append('types', JSON.stringify(details));
+      formData.append('name', name);
+      formData.append('productType', selectValue);
+      formData.append('desMarkdown', markdown);
+      formData.append('desHtml', html);
+      if (slug === 'new') {
+        axiosClient.post('/product/newproduct', formData).then((res) => {
+          if (res.code == 1) {
+            successToastMessage(res.message);
+          } else {
+            errorToastMessage(res.message);
+          }
+        });
+      } else {
+        axiosClient.post('/product/editproduct', formData).then((res) => {
+          if (res.code == 1) {
+            successToastMessage(res.message);
+          } else {
+            errorToastMessage(res.message);
+          }
+        });
+      }
+    }
   };
 
   return (
@@ -96,17 +152,38 @@ function ProductEdit() {
       <h1 className={cx('title')}>Sản phẩm</h1>
       <div className={cx('product')}>
         <div className={cx('product-image')}>
-          <img alt="product-preview" src={previewAvatar} className={cx('preview-image')} />
-          <input placeholder="Anh" className={cx('thumbnail')} type="file" onChange={handlePreviewAvatar} />
-          <button onClick={handleSubmit} className={cx('btn-submit')}>
-            Đăng sản phẩm
-          </button>
-          <div className={cx('error-message')}>Vui lòng điền đầy đủ thông tin</div>
+          <div className={cx('img-wrapper')}>
+            <img alt="product-preview" src={previewAvatar} className={cx('preview-image')} />
+            <label htmlFor="previewProduct" className={cx('btn-upload-img')}>
+              <FontAwesomeIcon icon={faImage} className={cx('upload-img-icon')} />
+            </label>
+          </div>
+          <input
+            id="previewProduct"
+            placeholder="Anh"
+            style={{ display: 'none' }}
+            className={cx('thumbnail')}
+            type="file"
+            onChange={handlePreviewAvatar}
+          />
+          <div>
+            <button onClick={handleSubmit} className={cx('btn-submit')}>
+              {slug === 'new' ? 'Đăng sản phẩm' : 'Cập nhật sản phẩm'}
+            </button>
+            <ToastContainer />
+          </div>
+          {!isValidate && <div className={cx('error-message')}>Vui lòng điền đầy đủ thông tin</div>}
         </div>
         <div className={cx('form')}>
           <div className={cx('form-group')}>
             <label className={cx('label')}>Tên sản phẩm</label>
-            <input value={name} onChange={(e) => setName(e.target.value)} className={cx('form-input')} type="text" />
+            <input
+              disabled={slug !== 'new'}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className={cx('form-input')}
+              type="text"
+            />
           </div>
           <div className={cx('form-group')}>
             <label className={cx('label')}>Loại sản phẩm</label>
@@ -114,13 +191,13 @@ function ProductEdit() {
               className={cx('form-select')}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={selectValue}
               color="primary"
               onChange={handleSelectChange}
+              value={selectValue || ''}
             >
-              {productTypes.map((item, index) => (
+              {productType.map((item, index) => (
                 <MenuItem key={index} value={item.slug}>
-                  {item.title}
+                  {item.name}
                 </MenuItem>
               ))}
             </Select>

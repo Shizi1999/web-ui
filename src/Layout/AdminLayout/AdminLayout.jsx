@@ -1,6 +1,7 @@
 import {
   faBars,
   faBook,
+  faBookSkull,
   faBoxOpen,
   faHouseUser,
   faRectangleList,
@@ -88,7 +89,7 @@ function AdminLayout({ children }) {
                 </NavLink>
               </MenuItem>
               <MenuItem
-                icon={<FontAwesomeIcon className={cx('menu-item-icon')} icon={faBook} />}
+                icon={<FontAwesomeIcon className={cx('menu-item-icon')} icon={faBookSkull} />}
                 className={cx('menu-item-text')}
               >
                 <NavLink className={({ isActive }) => cx({ linkActive: isActive })} to={'/newsmanage/trash'}>

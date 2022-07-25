@@ -21,14 +21,38 @@
   flex-direction: column;
   align-items: center;
 }
-
-.preview-image {
+.img-wrapper {
+  position: relative;
   margin-top: 20px;
   width: 200px;
   height: 250px;
   border: 1px solid var(--primary);
   margin-bottom: 10px;
+}
+.preview-image {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+}
+.btn-upload-img {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  box-shadow: 0 0 3px gray;
+  right: -16px;
+  bottom: -16px;
+  &:hover {
+    cursor: pointer;
+    color: var(--primary);
+  }
+}
+.upload-img-icon {
+  display: block;
 }
 
 .thumbnail {
@@ -93,6 +117,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  margin-bottom: 20px;
 }
 
 .group-input {
@@ -119,6 +145,12 @@
   margin-top: 18px;
   font-size: 1.2rem;
   cursor: pointer;
+}
+
+.note-message {
+  position: absolute;
+  bottom: -18px;
+  color: red;
 }
 
 .add-input-item {
